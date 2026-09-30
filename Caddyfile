@@ -1,0 +1,9 @@
+# HTTPS otomatis (Let's Encrypt) untuk domain di variabel DOMAIN.
+{$DOMAIN} {
+	encode zstd gzip
+	request_body {
+		max_size 2MB
+	}
+	header -Server
+	reverse_proxy web:8000
+}
