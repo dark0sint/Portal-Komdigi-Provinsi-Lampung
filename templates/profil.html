@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="pagehead"><div class="wrap"><h1>Profil</h1><p>Mengenal tugas, arah, dan susunan organisasi kami.</p></div></div>
+<div class="wrap sec">
+  {% for r in rows %}
+  <section class="split" id="{{ r.slug }}" {% if not loop.last %}{% endif %}>
+    <h2>{{ r.judul }}</h2>
+    <div class="prose">{{ r.isi|teks }}</div>
+  </section>
+  {% if not loop.last %}<hr class="sumline">{% endif %}
+  {% endfor %}
+</div>
+{% endblock %}

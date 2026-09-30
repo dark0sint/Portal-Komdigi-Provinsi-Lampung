@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="pagehead"><div class="wrap"><h1>Layanan publik</h1><p>Pilih layanan, isi formulir, dan pantau prosesnya lewat kode tiket. Tidak perlu datang ke kantor.</p></div></div>
+<div class="wrap sec">
+  <ul class="rows">
+    {% for l in rows %}
+    <li><a class="row" href="{{ url_for('layanan_detail', slug=l.slug) }}"><span class="t">{{ l.nama }}</span><span class="m">{{ l.ringkasan }}</span><span class="e">Estimasi<br>{{ l.estimasi }}</span></a></li>
+    {% else %}<li class="row"><span class="m">Belum ada layanan yang dipublikasikan.</span></li>{% endfor %}
+  </ul>
+  <p class="sumline">Sudah punya kode tiket? <a href="{{ url_for('lacak') }}">Lacak status tiket Anda</a>. Ingin melaporkan konten negatif? <a href="{{ url_for('pengaduan') }}">Buka halaman Pengaduan</a>.</p>
+</div>
+{% endblock %}

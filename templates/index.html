@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% from "_chart.html" import chart %}
+{% block content %}
+<section class="hero" aria-labelledby="judul-hero">
+  <div class="wrap">
+    <div>
+      <h1 id="judul-hero">Layanan digital Lampung, cukup dari satu pintu.</h1>
+      <p>Ajukan permohonan, laporkan konten negatif, cari peraturan, dan unduh data terbuka. Bisa dari ponsel, tanpa datang ke kantor.</p>
+      <form action="{{ url_for('cari') }}" method="get" role="search">
+        <label class="sr" for="cari-hero">Cari di portal</label>
+        <input id="cari-hero" type="search" name="q" maxlength="80" placeholder="Cari layanan, berita, peraturan, atau data">
+        <button class="btn" type="submit">Cari</button>
+      </form>
+      <p class="quick">
+        <a href="{{ url_for('pengaduan') }}">Buat pengaduan</a>
+        <a href="{{ url_for('lacak') }}">Lacak tiket</a>
+        <a href="{{ url_for('jdih') }}">Cari peraturan</a>
+        <a href="{{ url_for('data_list') }}">Unduh data</a>
+      </p>
+    </div>
+    <img class="siger" src="{{ asset('img/siger.svg') }}" alt="" width="400" height="300">
+  </div>
+</section>
+<div class="band" aria-hidden="true"></div>
+
+<section class="sec" aria-labelledby="h-layanan">
+  <div class="wrap split">
+    <div>
+      <h2 id="h-layanan">Layanan publik</h2>
+      <p class="lead">Setiap permohonan mendapat kode tiket, sehingga Anda bisa memantau prosesnya kapan saja.</p>
+      <a class="btn alt" href="{{ url_for('layanan_list') }}">Lihat semua layanan</a>
+    </div>
+    <ul class="rows">
+      {% for l in layanan %}
+      <li><a class="row" href="{{ url_for('layanan_detail', slug=l.slug) }}">
+        <span class="t">{{ l.nama }}</span><span class="m">{{ l.ringkasan }}</span><span class="e">Estimasi<br>{{ l.estimasi }}</span>
+      </a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="sec tint" aria-labelledby="h-berita">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="h-berita">Berita terbaru</h2><a href="{{ url_for('berita_list') }}">Semua berita</a></div>
+    {% if berita %}
+    <div class="news">
+      <article class="lead-item">
+        <p class="meta"><span class="tag">{{ berita[0].kategori }}</span> {{ berita[0].terbit|tgl }}</p>
+        <h3><a href="{{ url_for('berita_detail', slug=berita[0].slug) }}">{{ berita[0].judul }}</a></h3>
+        <p class="lead">{{ berita[0].ringkasan }}</p>
+      </article>
+      <ul class="list-plain">
+        {% for b in berita[1:] %}
+        <li><a href="{{ url_for('berita_detail', slug=b.slug) }}">{{ b.judul }}</a><br><span class="meta">{{ b.kategori }}, {{ b.terbit|tgl }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% else %}<p>Belum ada berita. Petugas dapat menambahkannya lewat panel admin.</p>{% endif %}
+  </div>
+</section>
+
+{% if ds and grafik %}
+<section class="sec" aria-labelledby="h-data">
+  <div class="wrap split">
+    <div>
+      <h2 id="h-data">Data terbuka</h2>
+      <p class="lead">{{ ds.judul }}, {{ ds.tahun }}.</p>
+      <p class="meta">Sumber: {{ ds.sumber }}</p>
+      <a class="btn alt" href="{{ url_for('data_detail', slug=ds.slug) }}">Buka tabel dan unduh</a>
+    </div>
+    <div class="panel">{{ chart(grafik, 'home') }}</div>
+  </div>
+</section>
+{% endif %}
+
+<section class="sec white" aria-labelledby="h-jdih">
+  <div class="wrap split">
+    <div>
+      <h2 id="h-jdih">Produk hukum</h2>
+      <p class="lead">Telusuri undang-undang dan peraturan yang berlaku lewat JDIH.</p>
+      <form action="{{ url_for('jdih') }}" method="get" role="search">
+        <div class="field"><label for="q-jdih">Kata kunci atau nomor</label><input id="q-jdih" type="search" name="q" maxlength="100"></div>
+        <button class="btn" type="submit">Cari peraturan</button>
+      </form>
+    </div>
+    <ul class="list-plain">
+      {% for j in jdih %}
+      <li><span class="badge {{ j.status }}">{{ j.status }}</span> <strong>{{ j.jenis }} No. {{ j.nomor }} Tahun {{ j.tahun }}</strong><br>tentang {{ j.judul }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="lapor" aria-labelledby="h-lapor">
+  <div class="wrap">
+    <div>
+      <h2 id="h-lapor">Menemukan judi online, hoaks, atau penipuan digital?</h2>
+      <p>Laporkan dalam dua menit. Anda boleh melapor tanpa nama, dan laporan dapat dipantau lewat kode tiket.</p>
+    </div>
+    <a class="btn gold" href="{{ url_for('pengaduan') }}">Buat laporan</a>
+  </div>
+</section>
+
+<div class="wrap sec">
+  <p class="sumline">Portal ini memuat {{ stat.layanan }} layanan, {{ stat.dataset }} set data, dan {{ stat.jdih }} produk hukum. Sejauh ini {{ stat.selesai }} tiket telah selesai ditangani.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% macro field(name, label, v, e, type='text', req=False, hint='', ac='', area=False, sel=None) %}
+<div class="field">
+  <label for="f-{{ name }}">{{ label }}{% if req %} <span aria-hidden="true">*</span><span class="sr">(wajib)</span>{% endif %}{% if hint %}<span class="hint" id="h-{{ name }}">{{ hint }}</span>{% endif %}</label>
+  {% if sel is not none %}
+  <select id="f-{{ name }}" name="{{ name }}" {% if req %}required{% endif %} {% if e[name] %}aria-invalid="true" aria-describedby="e-{{ name }}"{% endif %}>
+    <option value="">Pilih…</option>
+    {% for o in sel %}<option value="{{ o }}" {% if v[name]==o %}selected{% endif %}>{{ o }}</option>{% endfor %}
+  </select>
+  {% elif area %}
+  <textarea id="f-{{ name }}" name="{{ name }}" maxlength="4000" {% if req %}required{% endif %} {% if e[name] %}aria-invalid="true" aria-describedby="e-{{ name }}"{% endif %}>{{ v[name] or '' }}</textarea>
+  {% else %}
+  <input id="f-{{ name }}" name="{{ name }}" type="{{ type }}" value="{{ v[name] or '' }}" {% if ac %}autocomplete="{{ ac }}"{% endif %} {% if req %}required{% endif %} {% if e[name] %}aria-invalid="true" aria-describedby="e-{{ name }}"{% endif %}>
+  {% endif %}
+  {% if e[name] %}<div class="err" id="e-{{ name }}">{{ e[name] }}</div>{% endif %}
+</div>
+{% endmacro %}
+
+{% macro consent(e) %}
+<div class="field">
+  <label class="check"><input type="checkbox" name="setuju" value="1" required {% if e.setuju %}aria-invalid="true"{% endif %}>
+  <span>Saya menyetujui data saya diproses untuk menindaklanjuti permintaan ini sesuai <a href="{{ url_for('halaman', slug='kebijakan-privasi') }}" target="_blank" rel="noopener">Kebijakan Privasi</a>.</span></label>
+  {% if e.setuju %}<div class="err">{{ e.setuju }}</div>{% endif %}
+</div>
+<div class="hp" aria-hidden="true"><label>Jangan diisi<input type="text" name="situs" tabindex="-1" autocomplete="off"></label></div>
+{% endmacro %}
+
+{% macro errsummary(e) %}
+{% if e %}<div class="alert bad" role="alert"><strong>Formulir belum lengkap.</strong> Perbaiki {{ e|length }} isian yang ditandai di bawah.</div>{% endif %}
+{% endmacro %}

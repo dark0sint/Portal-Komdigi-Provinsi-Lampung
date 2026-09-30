@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "_form.html" import field, consent, errsummary %}
+{% block content %}
+<div class="pagehead"><div class="wrap"><h1>Kontak</h1><p>Sampaikan pertanyaan, saran, atau permintaan terkait data pribadi Anda.</p></div></div>
+<div class="wrap sec split">
+  <aside class="prose">
+    <h2>Kantor kami</h2>
+    <p>{{ site.alamat }}</p>
+    <p>Telepon: {{ site.telp }}<br>Email: <a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+    <p>Jam layanan: {{ site.jam }}</p>
+    <p>Lebih cepat? Klik <strong>Tanya asisten</strong> di pojok kanan bawah.</p>
+  </aside>
+  <form class="formbox" method="post" novalidate>
+    <h2>Kirim pesan</h2>
+    {{ errsummary(e) }}
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    {{ field('jenis','Kategori pesan',v,e,req=True,sel=kategori) }}
+    {{ field('nama','Nama',v,e,req=True,ac='name') }}
+    {{ field('email','Email',v,e,'email',True,'',"email") }}
+    {{ field('isi','Pesan',v,e,req=True,area=True) }}
+    {{ consent(e) }}
+    <button class="btn" type="submit">Kirim pesan</button>
+  </form>
+</div>
+{% endblock %}

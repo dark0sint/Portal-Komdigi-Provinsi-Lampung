@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "_form.html" import field, consent, errsummary %}
+{% block content %}
+<div class="pagehead"><div class="wrap">
+  <p class="crumbs"><a href="{{ url_for('layanan_list') }}">Layanan</a> / {{ l.nama }}</p>
+  <h1>{{ l.nama }}</h1><p>{{ l.ringkasan }}</p></div></div>
+<div class="wrap sec split">
+  <aside>
+    <h2>Persyaratan</h2>
+    <ul class="prose">{% for s in l.syarat|butir %}<li>{{ s }}</li>{% endfor %}</ul>
+    <p class="meta">Estimasi penyelesaian: <strong>{{ l.estimasi }}</strong></p>
+  </aside>
+  <form class="formbox" method="post" novalidate>
+    <h2>Ajukan permohonan</h2>
+    {{ errsummary(e) }}
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    {{ field('nama','Nama lengkap',v,e,req=True,ac='name') }}
+    {{ field('email','Alamat email',v,e,'email',True,'Kode tiket dan tanggapan dikaitkan dengan email ini.','email') }}
+    {{ field('telp','Nomor telepon',v,e,'tel',False,'',"tel") }}
+    {{ field('instansi','Instansi atau organisasi',v,e,ac='organization') }}
+    {{ field('isi','Keterangan permohonan',v,e,req=True,hint='Jelaskan kebutuhan Anda dan sebutkan kelengkapan persyaratan.',area=True) }}
+    {{ consent(e) }}
+    <button class="btn" type="submit">Kirim permohonan</button>
+  </form>
+</div>
+{% endblock %}

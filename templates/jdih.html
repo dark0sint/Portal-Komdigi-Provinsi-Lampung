@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "_pager.html" import pager with context %}
+{% block content %}
+<div class="pagehead"><div class="wrap"><h1>JDIH: produk hukum</h1><p>Jaringan Dokumentasi dan Informasi Hukum. Cari undang-undang, peraturan pemerintah, peraturan daerah, dan keputusan terkait.</p></div></div>
+<div class="wrap sec">
+  <form class="filters" method="get" role="search">
+    <div class="field"><label for="q">Kata kunci atau nomor</label><input id="q" type="search" name="q" value="{{ q }}" maxlength="100"></div>
+    <div class="field"><label for="jenis">Jenis</label><select id="jenis" name="jenis"><option value="">Semua</option>{% for j in jenis_opsi %}<option {% if j==jenis %}selected{% endif %}>{{ j }}</option>{% endfor %}</select></div>
+    <div class="field"><label for="tahun">Tahun</label><select id="tahun" name="tahun"><option value="">Semua</option>{% for t in tahun_opsi %}<option {% if t|string==tahun %}selected{% endif %}>{{ t }}</option>{% endfor %}</select></div>
+    <button class="btn" type="submit">Cari</button>
+  </form>
+  <p class="meta" aria-live="polite">{{ total }} produk hukum ditemukan.</p>
+  <div class="tablewrap" tabindex="0" role="region" aria-label="Daftar produk hukum">
+    <table>
+      <thead><tr><th scope="col">Jenis</th><th scope="col">Nomor dan tahun</th><th scope="col">Tentang</th><th scope="col">Status</th><th scope="col">Dokumen</th></tr></thead>
+      <tbody>
+      {% for j in rows %}
+      <tr><td>{{ j.jenis }}</td><td>No. {{ j.nomor }} Tahun {{ j.tahun }}</td><td>{{ j.judul }}</td><td><span class="badge {{ j.status }}">{{ j.status }}</span></td>
+        <td>{% if j.url %}<a href="{{ j.url }}" rel="noopener" target="_blank">Unduh<span class="sr"> {{ j.jenis }} {{ j.nomor }}/{{ j.tahun }}</span></a>{% else %}<span class="meta">Belum tersedia</span>{% endif %}</td></tr>
+      {% else %}<tr><td colspan="5">Tidak ada produk hukum yang cocok dengan pencarian.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {{ pager(page, pages) }}
+</div>
+{% endblock %}

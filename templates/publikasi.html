@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="pagehead"><div class="wrap"><h1>Publikasi dan keterbukaan informasi</h1><p>Informasi publik berkala, laporan kinerja, dan anggaran sesuai Undang-Undang Keterbukaan Informasi Publik.</p></div></div>
+<div class="wrap sec">
+  {% for kel, docs in grup.items() %}
+  <section class="split" aria-labelledby="g{{ loop.index }}">
+    <h2 id="g{{ loop.index }}">{{ kel }}</h2>
+    <ul class="rows">
+      {% for d in docs %}
+      <li>{% if d.url %}<a class="row" href="{{ d.url }}" target="_blank" rel="noopener"><span class="t">{{ d.judul }}</span><span class="e">{{ d.tahun }}</span><span class="m">Unduh dokumen</span></a>
+      {% else %}<div class="row"><span class="t">{{ d.judul }}</span><span class="e">{{ d.tahun }}</span><span class="m">Dokumen belum diunggah. <a href="{{ url_for('layanan_detail', slug='permohonan-informasi-publik') }}">Ajukan permohonan informasi</a></span></div>{% endif %}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% if not loop.last %}<div class="sumline"></div>{% endif %}
+  {% else %}<p>Belum ada dokumen yang dipublikasikan.</p>{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% macro chart(g, uid='c') %}
+<svg class="chart" viewBox="0 0 640 {{ g.tinggi }}" role="img" aria-labelledby="{{ uid }}-t">
+  <title id="{{ uid }}-t">Diagram batang: {{ g.judul }}</title>
+  {% for it in g["items"] %}
+  <text class="cl" x="0" y="{{ it.y + 17 }}">{{ it.label }}</text>
+  <rect class="cb" x="176" y="{{ it.y + 4 }}" width="{{ it.w }}" height="17" rx="2"/>
+  <text class="cv" x="{{ 176 + it.w + 6 }}" y="{{ it.y + 17 }}">{{ it.val|angka }}</text>
+  {% endfor %}
+</svg>
+{% endmacro %}

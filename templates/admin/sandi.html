@@ -1,0 +1,12 @@
+{% extends "admin/layout.html" %}
+{% block admin %}
+<h1>Ganti kata sandi</h1>
+{% if pesan %}<div class="alert bad" role="alert">{{ pesan }}</div>{% endif %}
+<form class="formbox" method="post" novalidate>
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <div class="field"><label for="l">Kata sandi saat ini</label><input id="l" name="lama" type="password" autocomplete="current-password" required></div>
+  <div class="field"><label for="b">Kata sandi baru<span class="hint">Minimal 12 karakter, memuat huruf dan angka.</span></label><input id="b" name="baru" type="password" autocomplete="new-password" required></div>
+  <div class="field"><label for="u">Ulangi kata sandi baru</label><input id="u" name="ulang" type="password" autocomplete="new-password" required></div>
+  <button class="btn" type="submit">Ganti kata sandi</button>
+</form>
+{% endblock %}

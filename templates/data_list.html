@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="pagehead"><div class="wrap"><h1>Data terbuka</h1><p>Satu portal untuk data sektoral. Setiap set data dapat dilihat sebagai diagram dan tabel, lalu diunduh sebagai CSV atau JSON.</p></div></div>
+<div class="wrap sec">
+  <form class="filters" method="get" role="search">
+    <div class="field"><label for="q">Cari data</label><input id="q" type="search" name="q" value="{{ q }}" maxlength="80"></div>
+    <div class="field"><label for="kategori">Kategori</label>
+      <select id="kategori" name="kategori"><option value="">Semua</option>{% for k in kategori %}<option {% if k==kat %}selected{% endif %}>{{ k }}</option>{% endfor %}</select></div>
+    <button class="btn" type="submit">Terapkan</button>
+  </form>
+  <ul class="rows">
+    {% for d in rows %}
+    <li><a class="row" href="{{ url_for('data_detail', slug=d.slug) }}"><span class="t">{{ d.judul }}</span><span class="m">{{ d.deskripsi }}</span><span class="e">{{ d.kategori }}<br>{{ d.tahun }}</span></a></li>
+    {% else %}<li class="row"><span class="m">Tidak ada data yang cocok.</span></li>{% endfor %}
+  </ul>
+</div>
+{% endblock %}

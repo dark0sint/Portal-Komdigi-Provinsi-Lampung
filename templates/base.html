@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="id" data-size="0" data-contrast="normal" data-font="normal" data-align="left">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% if page_title %}{{ page_title }} | {% endif %}{{ site.nama }}</title>
+<meta name="description" content="{{ meta_desc or site.tagline }}">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<meta name="theme-color" content="#14262d">
+<meta property="og:title" content="{{ page_title or site.nama }}">
+<meta property="og:description" content="{{ meta_desc or site.tagline }}">
+<meta property="og:type" content="website">
+<link rel="icon" href="{{ asset('img/favicon.svg') }}" type="image/svg+xml">
+<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+<script src="{{ asset('js/app.js') }}" defer></script>
+</head>
+<body>
+{% set ep = request.endpoint or '' %}
+<a class="skip" href="#konten">Lewati ke konten utama</a>
+
+<div class="govbar">
+  <div class="wrap">
+    <span><span class="lock" aria-hidden="true"></span>Situs resmi Pemerintah Provinsi Lampung</span>
+    <details>
+      <summary>Cara memastikan situs ini asli</summary>
+      <div class="how">Alamat situs resmi pemerintah berakhiran <b>.go.id</b> dan diawali <b>https://</b> dengan ikon gembok di peramban. Alamat portal ini: <b>{{ site.domain }}</b>. Petugas kami tidak pernah meminta kode OTP atau kata sandi lewat pesan pribadi.</div>
+    </details>
+  </div>
+</div>
+
+<header class="head">
+  <div class="wrap">
+    <a class="brand" href="{{ url_for('index') }}">
+      <img src="{{ asset('img/logo.svg') }}" alt="" width="44" height="44">
+      <span><b>{{ site.nama }}</b><small>{{ site.tagline }}</small></span>
+    </a>
+    <button class="iconbtn" id="a11y-toggle" type="button" aria-expanded="false" aria-controls="a11y-panel">Aksesibilitas</button>
+    <button class="iconbtn menubtn" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Menu utama">
+      <a href="{{ url_for('index') }}" {% if ep=='index' %}aria-current="page"{% endif %}>Beranda</a>
+      <a href="{{ url_for('profil') }}" {% if ep in ('profil',) %}aria-current="page"{% endif %}>Profil</a>
+      <a href="{{ url_for('berita_list') }}" {% if ep.startswith('berita') %}aria-current="page"{% endif %}>Berita</a>
+      <a href="{{ url_for('layanan_list') }}" {% if ep.startswith('layanan') %}aria-current="page"{% endif %}>Layanan</a>
+      <a href="{{ url_for('data_list') }}" {% if ep.startswith('data') %}aria-current="page"{% endif %}>Data</a>
+      <a href="{{ url_for('jdih') }}" {% if ep=='jdih' %}aria-current="page"{% endif %}>JDIH</a>
+      <a href="{{ url_for('publikasi') }}" {% if ep=='publikasi' %}aria-current="page"{% endif %}>Publikasi</a>
+      <a href="{{ url_for('kontak') }}" {% if ep=='kontak' %}aria-current="page"{% endif %}>Kontak</a>
+      <a class="cta" href="{{ url_for('pengaduan') }}">Lapor konten negatif</a>
+    </nav>
+  </div>
+</header>
+<div class="band" aria-hidden="true"></div>
+
+<section class="a11y" id="a11y-panel" aria-label="Pengaturan aksesibilitas" hidden>
+  <div class="wrap">
+    <fieldset><legend>Ukuran teks</legend>
+      <div class="seg">
+        <button type="button" data-set="size:0" aria-label="Ukuran teks normal">A</button>
+        <button type="button" data-set="size:1" aria-label="Ukuran teks besar 112%">A+</button>
+        <button type="button" data-set="size:2" aria-label="Ukuran teks lebih besar 125%">A++</button>
+        <button type="button" data-set="size:3" aria-label="Ukuran teks terbesar 150%">A+++</button>
+      </div></fieldset>
+    <fieldset><legend>Kontras</legend>
+      <div class="seg">
+        <button type="button" data-set="contrast:normal">Normal</button>
+        <button type="button" data-set="contrast:high">Tinggi</button>
+      </div></fieldset>
+    <fieldset><legend>Jenis huruf</legend>
+      <div class="seg">
+        <button type="button" data-set="font:normal">Standar</button>
+        <button type="button" data-set="font:dyslexia">Ramah disleksia</button>
+      </div></fieldset>
+    <fieldset><legend>Perataan teks</legend>
+      <div class="seg">
+        <button type="button" data-set="align:left">Rata kiri</button>
+        <button type="button" data-set="align:right">Rata kanan</button>
+      </div></fieldset>
+    <fieldset><legend>Bantuan suara</legend>
+      <div class="seg">
+        <button type="button" id="read-aloud" aria-pressed="false">Baca halaman</button>
+        <button type="button" data-reset>Atur ulang</button>
+      </div></fieldset>
+  </div>
+</section>
+
+<main id="konten" tabindex="-1">
+{% with pesan = get_flashed_messages() %}{% if pesan %}<div class="wrap">{% for m in pesan %}<div class="alert" role="status">{{ m }}</div>{% endfor %}</div>{% endif %}{% endwith %}
+{% block content %}{% endblock %}
+</main>
+
+<footer class="foot">
+  <div class="band" aria-hidden="true"></div>
+  <div class="wrap">
+    <div>
+      <h2>{{ site.nama }}</h2>
+      <p>{{ site.alamat }}<br>Telepon {{ site.telp }}<br><a href="mailto:{{ site.email }}">{{ site.email }}</a><br>{{ site.jam }}</p>
+    </div>
+    <div>
+      <h2>Layanan</h2>
+      <ul>
+        <li><a href="{{ url_for('layanan_list') }}">Permohonan layanan</a></li>
+        <li><a href="{{ url_for('pengaduan') }}">Pengaduan konten negatif</a></li>
+        <li><a href="{{ url_for('lacak') }}">Lacak tiket</a></li>
+        <li><a href="{{ url_for('publikasi') }}">Informasi publik (PPID)</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Ketentuan</h2>
+      <ul>
+        <li><a href="{{ url_for('halaman', slug='kebijakan-privasi') }}">Kebijakan privasi</a></li>
+        <li><a href="{{ url_for('halaman', slug='syarat-ketentuan') }}">Syarat dan ketentuan</a></li>
+        <li><a href="{{ url_for('halaman', slug='aksesibilitas') }}">Pernyataan aksesibilitas</a></li>
+        <li><a href="{{ url_for('cari') }}">Pencarian</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap legal">© {{ tahun_ini }} Pemerintah Provinsi Lampung. Seluruh akses dienkripsi dengan HTTPS. Portal ini tidak memakai pelacak iklan.</div>
+</footer>
+
+{% if not ep.startswith('admin') %}
+<button class="chatbtn" id="chat-toggle" type="button" aria-expanded="false" aria-controls="chat">Tanya asisten</button>
+<section class="chat" id="chat" aria-label="Asisten portal" hidden>
+  <header><span>Asisten portal</span><button type="button" id="chat-close">Tutup</button></header>
+  <div class="log" id="chat-log" role="log" aria-live="polite"></div>
+  <form id="chat-form" autocomplete="off">
+    <label class="sr" for="chat-input">Pertanyaan Anda</label>
+    <input id="chat-input" type="text" maxlength="200" placeholder="Tulis pertanyaan…">
+    <button type="submit">Kirim</button>
+  </form>
+</section>
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,14 @@
+{% extends "admin/layout.html" %}
+{% block admin %}
+<h1>Tiket masuk</h1>
+<form class="filters" method="get">
+  <div class="field"><label for="tipe">Jenis</label><select id="tipe" name="tipe"><option value="">Semua</option>{% for t in ['layanan','pengaduan','kontak'] %}<option {% if t==tipe %}selected{% endif %}>{{ t }}</option>{% endfor %}</select></div>
+  <div class="field"><label for="status">Status</label><select id="status" name="status"><option value="">Semua</option>{% for s in STATUS %}<option {% if s==st %}selected{% endif %}>{{ s }}</option>{% endfor %}</select></div>
+  <button class="btn" type="submit">Terapkan</button>
+</form>
+<div class="tablewrap"><table>
+  <thead><tr><th>Kode</th><th>Tipe</th><th>Jenis</th><th>Pengirim</th><th>Status</th><th>Masuk</th></tr></thead>
+  <tbody>{% for t in rows %}
+  <tr><td><a href="{{ url_for('admin_tiket_detail', tid=t.id) }}">{{ t.kode }}</a>{% if t.ditandai %} <span class="badge Ditolak">Ditandai</span>{% endif %}</td><td>{{ t.tipe }}</td><td>{{ t.jenis }}</td><td>{{ t.nama }}</td><td><span class="badge {{ t.status }}">{{ t.status }}</span></td><td>{{ t.dibuat|tgl(True) }}</td></tr>
+  {% else %}<tr><td colspan="6">Tidak ada tiket.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

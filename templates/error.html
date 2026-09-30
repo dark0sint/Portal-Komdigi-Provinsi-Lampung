@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="wrap sec"><div class="page">
+  <p class="meta">Kode {{ kode }}</p>
+  <h1>{{ judul }}</h1>
+  {% if pesan %}<p class="lead">{{ pesan }}</p>{% else %}<p class="lead">Periksa kembali alamat yang Anda ketik, atau kembali ke beranda.</p>{% endif %}
+  <p><a class="btn" href="{{ url_for('index') }}">Kembali ke beranda</a> <a class="btn alt" href="{{ url_for('cari') }}">Cari di portal</a></p>
+</div></div>
+{% endblock %}

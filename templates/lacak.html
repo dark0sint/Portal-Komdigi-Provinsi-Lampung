@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="pagehead"><div class="wrap"><h1>Lacak tiket</h1><p>Lihat status permohonan, pengaduan, atau pesan Anda.</p></div></div>
+<div class="wrap sec">
+  <div class="page">
+  <form class="formbox" method="post" novalidate>
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    {% if galat %}<div class="alert bad" role="alert">{{ galat }}</div>{% endif %}
+    <div class="field"><label for="kode">Kode tiket</label><input id="kode" name="kode" type="text" value="{{ kode }}" maxlength="20" required autocomplete="off" placeholder="Contoh: ADU-7K3M9XQ2"></div>
+    <div class="field"><label for="email">Email <span class="hint">Isi bila Anda memakai email saat mengirim.</span></label><input id="email" name="email" type="email" autocomplete="email"></div>
+    <button class="btn" type="submit">Cek status</button>
+  </form>
+  {% if t %}
+  <section class="sumline" aria-labelledby="h-hasil">
+    <h2 id="h-hasil">Tiket {{ t.kode }}</h2>
+    <p><span class="badge {{ t.status }}">{{ t.status }}</span> &nbsp; {{ t.jenis }}</p>
+    <ol class="steps">
+      {% set urut = ['Diterima','Diproses','Selesai'] %}
+      {% for s in urut %}<li class="{% if t.status in urut and urut.index(t.status) >= loop.index0 %}on{% endif %}">{{ s }}</li>{% endfor %}
+      {% if t.status == 'Ditolak' %}<li class="on">Ditolak</li>{% endif %}
+    </ol>
+    <p class="meta">Dikirim {{ t.dibuat|tgl(True) }}. Pembaruan terakhir {{ t.diperbarui|tgl(True) }}.</p>
+    {% if t.tanggapan %}<div class="alert"><strong>Tanggapan petugas</strong><br>{{ t.tanggapan }}</div>
+    {% else %}<p>Belum ada tanggapan dari petugas.</p>{% endif %}
+  </section>{% endif %}
+  </div>
+</div>
+{% endblock %}

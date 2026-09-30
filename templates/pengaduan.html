@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "_form.html" import field, consent, errsummary %}
+{% block content %}
+<div class="pagehead"><div class="wrap"><h1>Pengaduan konten negatif</h1>
+<p>Laporkan judi online, penipuan, hoaks, konten yang membahayakan anak, atau gangguan pada situs pemerintah. Anda boleh melapor tanpa nama.</p></div></div>
+<div class="wrap sec split">
+  <aside>
+    <h2>Sebelum melapor</h2>
+    <ul class="prose">
+      <li>Salin tautan halaman atau akun yang dilaporkan.</li>
+      <li>Jangan membagikan ulang konten tersebut, terutama yang melibatkan anak.</li>
+      <li>Bila Anda dalam bahaya langsung, hubungi layanan darurat 112.</li>
+      <li>Isi email bila ingin memantau tindak lanjut dengan kode tiket.</li>
+    </ul>
+    <p class="meta">Laporan yang memuat banyak tautan ditandai otomatis agar petugas memeriksanya lebih dulu.</p>
+  </aside>
+  <form class="formbox" method="post" novalidate>
+    <h2>Formulir laporan</h2>
+    {{ errsummary(e) }}
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    {{ field('jenis','Kategori laporan',v,e,req=True,sel=kategori) }}
+    {{ field('tautan','Tautan atau alamat akun yang dilaporkan',v,e,'url',False,'Contoh: https://contoh.com/halaman') }}
+    {{ field('isi','Uraian temuan',v,e,req=True,hint='Apa yang Anda lihat, kapan, dan di mana.',area=True) }}
+    {{ field('nama','Nama',v,e,hint='Boleh dikosongkan untuk melapor anonim.',ac='name') }}
+    {{ field('email','Email',v,e,'email',False,'Diperlukan bila ingin memantau status laporan.','email') }}
+    {{ consent(e) }}
+    <button class="btn red" type="submit">Kirim laporan</button>
+  </form>
+</div>
+{% endblock %}

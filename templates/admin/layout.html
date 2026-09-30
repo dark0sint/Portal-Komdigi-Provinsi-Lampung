@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="wrap adm">
+  <nav aria-label="Menu admin">
+    {% set ep = request.endpoint %}
+    <a href="{{ url_for('admin_dashboard') }}" {% if ep=='admin_dashboard' %}aria-current="page"{% endif %}>Dasbor</a>
+    <a href="{{ url_for('admin_tiket') }}" {% if ep.startswith('admin_tiket') %}aria-current="page"{% endif %}>Tiket masuk</a>
+    <hr>
+    {% for k, c in ENT_MENU %}<a href="{{ url_for('admin_list', ent=k) }}" {% if request.view_args and request.view_args.get('ent')==k %}aria-current="page"{% endif %}>{{ c.label }}</a>{% endfor %}
+    <hr>
+    <a href="{{ url_for('admin_audit') }}" {% if ep=='admin_audit' %}aria-current="page"{% endif %}>Log audit</a>
+    <a href="{{ url_for('admin_sandi') }}" {% if ep=='admin_sandi' %}aria-current="page"{% endif %}>Ganti kata sandi</a>
+    <form method="post" action="{{ url_for('admin_keluar') }}"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="btn alt sm" type="submit">Keluar</button></form>
+  </nav>
+  <section>{% block admin %}{% endblock %}</section>
+</div>
+{% endblock %}

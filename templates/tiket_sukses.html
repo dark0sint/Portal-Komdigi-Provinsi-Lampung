@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="wrap sec"><div class="page">
+  <h1>Terima kasih, {{ tipe }} Anda sudah kami terima.</h1>
+  <p class="lead">Simpan kode tiket berikut. Kode ini tidak dikirim otomatis lewat email.</p>
+  <p><span class="code">{{ kode }}</span></p>
+  <p>Untuk melihat status, buka halaman <a href="{{ url_for('lacak') }}">Lacak tiket</a>, lalu masukkan kode ini (dan email bila Anda mengisinya). Kami akan menanggapi sesuai estimasi layanan.</p>
+  <p><a class="btn" href="{{ url_for('lacak', kode=kode) }}">Lacak sekarang</a> <a class="btn alt" href="{{ url_for('index') }}">Kembali ke beranda</a></p>
+</div></div>
+{% endblock %}

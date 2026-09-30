@@ -1,0 +1,18 @@
+{% extends "admin/layout.html" %}
+{% block admin %}
+<p class="crumbs"><a href="{{ url_for('admin_tiket') }}">Tiket</a> / {{ t.kode }}</p>
+<h1>{{ t.jenis }}</h1>
+{% if t.ditandai %}<div class="alert warn">Ditandai penyaring otomatis. Periksa tautan dengan hati-hati dan jangan membukanya di perangkat kerja utama.</div>{% endif %}
+<div class="panel">
+  <p class="meta">Masuk {{ t.dibuat|tgl(True) }}, tipe {{ t.tipe }}</p>
+  <p><strong>Pengirim:</strong> {{ t.nama }}{% if t.email %} ({{ t.email }}){% endif %}{% if t.telp %}, telp {{ t.telp }}{% endif %}{% if t.instansi %}, {{ t.instansi }}{% endif %}</p>
+  {% if t.tautan %}<p><strong>Tautan dilaporkan (teks, tidak diklik otomatis):</strong> <code>{{ t.tautan }}</code></p>{% endif %}
+  <div class="prose">{{ t.isi|teks }}</div>
+</div>
+<form class="formbox" method="post">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <div class="field"><label for="status">Status</label><select id="status" name="status">{% for s in STATUS %}<option {% if s==t.status %}selected{% endif %}>{{ s }}</option>{% endfor %}</select></div>
+  <div class="field"><label for="tanggapan">Tanggapan untuk pengirim<span class="hint">Tampil di halaman Lacak tiket. Jangan menulis data pribadi lain.</span></label><textarea id="tanggapan" name="tanggapan" maxlength="3000">{{ t.tanggapan }}</textarea></div>
+  <button class="btn" type="submit">Simpan</button>
+</form>
+{% endblock %}

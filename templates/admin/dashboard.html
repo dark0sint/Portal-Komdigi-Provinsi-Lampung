@@ -1,0 +1,14 @@
+{% extends "admin/layout.html" %}
+{% block admin %}
+<h1>Dasbor</h1>
+{% if ditandai %}<div class="alert warn"><strong>{{ ditandai }} tiket ditandai</strong> oleh penyaring otomatis (banyak tautan atau kata kunci berisiko). <a href="{{ url_for('admin_tiket', status='Diterima') }}">Periksa sekarang</a>.</div>{% endif %}
+<div class="kpi">
+  <div><b>{{ baru }}</b>Tiket baru</div>
+  {% for k, c in ENT_MENU %}<div><b>{{ hitung[k] }}</b>{{ c.label }}</div>{% endfor %}
+</div>
+<h2>Tiket terbaru</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th>Kode</th><th>Jenis</th><th>Status</th><th>Masuk</th></tr></thead>
+  <tbody>{% for t in terbaru %}<tr><td><a href="{{ url_for('admin_tiket_detail', tid=t.id) }}">{{ t.kode }}</a></td><td>{{ t.jenis }}</td><td><span class="badge {{ t.status }}">{{ t.status }}</span></td><td>{{ t.dibuat|tgl(True) }}</td></tr>
+  {% else %}<tr><td colspan="4">Belum ada tiket.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

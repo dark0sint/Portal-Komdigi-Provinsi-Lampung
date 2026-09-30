@@ -1,0 +1,13 @@
+{% extends "admin/layout.html" %}
+{% block admin %}
+<div class="sec-head"><h1>{{ cfg.label }}</h1><a class="btn" href="{{ url_for('admin_form', ent=ent) }}">Tambah</a></div>
+<div class="tablewrap"><table>
+  <thead><tr>{% for c in cfg.kolom %}<th scope="col">{{ c|replace('_',' ')|capitalize }}</th>{% endfor %}<th scope="col">Tindakan</th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+  <tr>{% for c in cfg.kolom %}<td>{{ (r[c]|string)[:110] }}</td>{% endfor %}
+    <td><div class="actions"><a class="btn alt sm" href="{{ url_for('admin_form', ent=ent, rid=r.id) }}">Ubah<span class="sr"> {{ r[cfg.kolom[0]] }}</span></a>
+      <form class="inline" method="post" action="{{ url_for('admin_hapus', ent=ent, rid=r.id) }}"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="linkbtn" type="submit" data-confirm>Hapus<span class="sr"> {{ r[cfg.kolom[0]] }}</span></button></form></div></td></tr>
+  {% else %}<tr><td colspan="{{ cfg.kolom|length + 1 }}">Belum ada data. Klik Tambah untuk memulai.</td></tr>{% endfor %}
+  </tbody></table></div>
+{% endblock %}

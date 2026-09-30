@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_pager.html" import pager with context %}
+{% block content %}
+<div class="pagehead"><div class="wrap"><h1>Berita</h1><p>Pengumuman, siaran pers, dan artikel dari {{ site.nama }}.</p></div></div>
+<div class="wrap sec">
+  <form class="filters" method="get" role="search">
+    <div class="field"><label for="q">Cari berita</label><input id="q" type="search" name="q" value="{{ q }}" maxlength="80"></div>
+    <div class="field"><label for="kategori">Kategori</label>
+      <select id="kategori" name="kategori"><option value="">Semua</option>{% for k in kategori %}<option {% if k==kat %}selected{% endif %}>{{ k }}</option>{% endfor %}</select></div>
+    <button class="btn" type="submit">Terapkan</button>
+  </form>
+  <p class="meta" aria-live="polite">{{ total }} berita ditemukan.</p>
+  <ul class="rows">
+    {% for b in rows %}
+    <li><a class="row" href="{{ url_for('berita_detail', slug=b.slug) }}"><span class="t">{{ b.judul }}</span><span class="m">{{ b.ringkasan }}</span><span class="e">{{ b.kategori }}<br>{{ b.terbit|tgl }}</span></a></li>
+    {% else %}<li class="row"><span class="m">Tidak ada berita yang cocok. Ubah kata kunci atau kategori.</span></li>{% endfor %}
+  </ul>
+  {{ pager(page, pages) }}
+</div>
+{% endblock %}

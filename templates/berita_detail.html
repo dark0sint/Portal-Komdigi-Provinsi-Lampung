@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="wrap sec">
+  <article class="page">
+    <p class="crumbs"><a href="{{ url_for('berita_list') }}">Berita</a> / {{ b.kategori }}</p>
+    <h1>{{ b.judul }}</h1>
+    <p class="meta"><span class="tag">{{ b.kategori }}</span> Terbit {{ b.terbit|tgl }}</p>
+    <p class="lead">{{ b.ringkasan }}</p>
+    <div class="prose">{{ b.isi|teks }}</div>
+  </article>
+  {% if lain %}
+  <aside class="page sumline" aria-labelledby="h-lain"><h2 id="h-lain">Berita lainnya</h2>
+    <ul class="list-plain">{% for x in lain %}<li><a href="{{ url_for('berita_detail', slug=x.slug) }}">{{ x.judul }}</a><br><span class="meta">{{ x.terbit|tgl }}</span></li>{% endfor %}</ul>
+  </aside>{% endif %}
+</div>
+{% endblock %}

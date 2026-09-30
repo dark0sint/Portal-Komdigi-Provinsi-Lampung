@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="wrap"><div class="narrow">
+  <h1>Masuk petugas</h1>
+  <p class="meta">Area ini khusus petugas. Akses dilindungi kata sandi dan kode OTP, serta dicatat dalam log audit.</p>
+  {% if pesan %}<div class="alert bad" role="alert">{{ pesan }}</div>{% endif %}
+  <form class="formbox" method="post" novalidate>
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <div class="field"><label for="u">Nama pengguna</label><input id="u" name="username" type="text" autocomplete="username" required autofocus></div>
+    <div class="field"><label for="p">Kata sandi</label><input id="p" name="password" type="password" autocomplete="current-password" required></div>
+    <div class="field"><label for="o">Kode OTP <span class="hint">6 digit dari aplikasi autentikator. Kosongkan bila baru pertama kali masuk.</span></label><input id="o" name="otp" type="text" inputmode="numeric" pattern="[0-9 ]*" autocomplete="one-time-code" maxlength="8"></div>
+    <button class="btn" type="submit">Masuk</button>
+  </form>
+</div></div>
+{% endblock %}

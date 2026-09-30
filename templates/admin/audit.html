@@ -1,0 +1,6 @@
+{% extends "admin/layout.html" %}
+{% block admin %}
+<h1>Log audit</h1><p class="meta">200 catatan terakhir.</p>
+<div class="tablewrap"><table><thead><tr><th>Waktu</th><th>Pengguna</th><th>Tindakan</th><th>IP</th></tr></thead>
+<tbody>{% for r in rows %}<tr><td>{{ r.waktu|tgl(True) }}</td><td>{{ r.pengguna }}</td><td>{{ r.aksi }}</td><td>{{ r.ip }}</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

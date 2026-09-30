@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "_chart.html" import chart %}
+{% block content %}
+<div class="pagehead"><div class="wrap">
+  <p class="crumbs"><a href="{{ url_for('data_list') }}">Data terbuka</a> / {{ d.kategori }}</p>
+  <h1>{{ d.judul }}</h1><p>{{ d.deskripsi }}</p></div></div>
+<div class="wrap sec">
+  {% if d.sumber.startswith('Data contoh') %}<div class="alert warn" role="note"><strong>Data contoh.</strong> Angka pada set data ini belum resmi dan hanya menunjukkan struktur tampilan.</div>{% endif %}
+  <p class="meta">Sumber: {{ d.sumber }}. Tahun {{ d.tahun }}. Diperbarui {{ d.dibuat|tgl }}.</p>
+  <p><a class="btn" href="{{ url_for('data_csv', slug=d.slug) }}">Unduh CSV</a> <a class="btn alt" href="{{ url_for('data_json', slug=d.slug) }}">Buka JSON</a></p>
+  {% if grafik %}<div class="panel">{{ chart(grafik, 'det') }}</div>{% endif %}
+  <h2 class="sumline">Tabel data</h2>
+  <div class="tablewrap" tabindex="0" role="region" aria-label="Tabel {{ d.judul }}">
+    <table>
+      <thead><tr>{% for h in head %}<th scope="col">{{ h }}</th>{% endfor %}</tr></thead>
+      <tbody>{% for r in rows %}<tr>{% for c in r %}<td {% if not loop.first and c.replace('.','',1).replace('-','',1).isdigit() %}class="num"{% endif %}>{{ c }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+    </table>
+  </div>
+  {% if total > rows|length %}<p class="meta">Menampilkan {{ rows|length }} dari {{ total }} baris. Unduh CSV untuk data lengkap.</p>{% endif %}
+</div>
+{% endblock %}

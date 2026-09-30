@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="pagehead"><div class="wrap"><h1>Pencarian</h1>
+<form method="get" role="search" class="filters"><div class="field"><label for="q">Kata kunci</label><input id="q" type="search" name="q" value="{{ q }}" maxlength="80" autofocus></div><button class="btn" type="submit">Cari</button></form></div></div>
+<div class="wrap sec">
+  {% if q %}<p class="meta" aria-live="polite">{{ jumlah }} hasil untuk “{{ q }}”.</p>{% endif %}
+  {% for grup, items in hasil.items() if items %}
+  <section class="split"><h2>{{ grup }}</h2>
+    <ul class="list-plain">
+    {% for i in items %}
+      <li>
+      {% if grup=='Berita' %}<a href="{{ url_for('berita_detail', slug=i.slug) }}">{{ i.judul }}</a><br><span class="meta">{{ i.ringkasan }}</span>
+      {% elif grup=='Layanan' %}<a href="{{ url_for('layanan_detail', slug=i.slug) }}">{{ i.nama }}</a><br><span class="meta">{{ i.ringkasan }}</span>
+      {% elif grup=='Data' %}<a href="{{ url_for('data_detail', slug=i.slug) }}">{{ i.judul }}</a><br><span class="meta">{{ i.deskripsi }}</span>
+      {% elif grup=='Produk hukum' %}<a href="{{ url_for('jdih', q=i.nomor) }}">{{ i.jenis }} No. {{ i.nomor }} Tahun {{ i.tahun }}</a><br><span class="meta">{{ i.judul }}</span>
+      {% else %}<a href="{{ url_for('publikasi') }}">{{ i.judul }}</a><br><span class="meta">{{ i.kelompok }}, {{ i.tahun }}</span>{% endif %}
+      </li>
+    {% endfor %}
+    </ul></section>
+  {% endfor %}
+  {% if q and not jumlah %}<p>Tidak ada hasil. Coba kata kunci yang lebih umum, atau <a href="{{ url_for('kontak') }}">tanyakan lewat halaman Kontak</a>.</p>{% endif %}
+  {% if not q %}<p>Ketik kata kunci untuk mencari berita, layanan, produk hukum, data, dan dokumen publikasi.</p>{% endif %}
+</div>
+{% endblock %}

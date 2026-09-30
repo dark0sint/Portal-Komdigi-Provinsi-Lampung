@@ -1,0 +1,22 @@
+{% extends "admin/layout.html" %}
+{% block admin %}
+<h1>{{ page_title }}</h1>
+{% if e %}<div class="alert bad" role="alert">Ada {{ e|length }} isian yang perlu diperbaiki.</div>{% endif %}
+<form class="formbox" method="post" novalidate>
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  {% for f in cfg.fields %}
+  <div class="field">
+    <label for="f-{{ f.name }}">{{ f.label }}{% if f.req %} *{% endif %}{% if f.hint %}<span class="hint">{{ f.hint }}</span>{% endif %}</label>
+    {% if f.tipe.startswith('select:') %}
+      <select id="f-{{ f.name }}" name="{{ f.name }}" {% if e[f.name] %}aria-invalid="true"{% endif %}><option value="">Pilih…</option>{% for o in opsi(f) %}<option {% if v[f.name]==o %}selected{% endif %}>{{ o }}</option>{% endfor %}</select>
+    {% elif f.tipe.startswith('textarea') or f.tipe=='csv' %}
+      <textarea id="f-{{ f.name }}" name="{{ f.name }}" class="{% if f.tipe=='textarea-lg' or f.tipe=='csv' %}lg{% endif %} {% if f.tipe=='csv' %}mono{% endif %}" {% if e[f.name] %}aria-invalid="true"{% endif %}>{{ v[f.name] or '' }}</textarea>
+    {% else %}
+      <input id="f-{{ f.name }}" name="{{ f.name }}" type="{{ 'date' if f.tipe=='date' else 'url' if f.tipe=='url' else 'text' }}" value="{{ v[f.name] or '' }}" {% if f.tipe=='number' %}inputmode="numeric" maxlength="4"{% endif %} {% if e[f.name] %}aria-invalid="true"{% endif %}>
+    {% endif %}
+    {% if e[f.name] %}<div class="err">{{ e[f.name] }}</div>{% endif %}
+  </div>
+  {% endfor %}
+  <button class="btn" type="submit">Simpan</button> <a class="btn alt" href="{{ url_for('admin_list', ent=ent) }}">Batal</a>
+</form>
+{% endblock %}
